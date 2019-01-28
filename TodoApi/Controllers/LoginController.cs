@@ -1,30 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-// Контроллер Login
-
-namespace TodoApi.Controllers
+namespace comptech2019_ict.Controllers
 {
-    [Route("api/[controller]")]
-    public class LoginController : Controller
+    
+    public class User
     {
-        // POST api/<controller>
-        [HttpPost]
-        public string Post([FromBody]string value)
+        public string Name { get; set; }
+        public string Password { get; set; }
+    }
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LoginController : ControllerBase
+    {
+
+        // GET: api/Login/Logout
+        [HttpGet("[action]")]
+        public string Logout()
         {
-            return "Hello world!";
+            return "logout";
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public string Delete(int id)
+        // POST: api/Login/Auth json body
+
+        [HttpPost("[action]")]
+        public string Auth([FromBody] User user)
         {
-            return "Hello world!";
+            const int Port = 2231;
+            const string ServerName = "ssd1.sscc.ru";
+            const string Charset = "utf-8";
+
+            var ssh = new Chilkat.Ssh();
+
+            bool success = UnlockSSH(ssh);
+            if(success != true)
+            {
+                return ssh.LastErrorText + "\nUnlock SSH failed";
+            }
+
+            success = ssh.Connect(ServerName, Port);
+            if (success != true)
+            {
+                return ssh.LastErrorText + "\nConnection failed";
+            }
+
+            success = ssh.AuthenticatePw(user.Name, user.Password);
+            if(success != true)
+            {
+                Console.WriteLine(ssh.LastErrorText + "\nUnlock SSH failed");
+                return ssh.LastErrorText + "\nAuthenticate failed";
+            }
+
+            string strOutput = ssh.QuickCommand("ls", Charset);
+            if (ssh.LastMethodSuccess != true)
+            {
+                Console.WriteLine(ssh.LastErrorText);
+                return ssh.LastErrorText + "\nCommand failed";
+            }
+            Console.WriteLine(ssh.LastErrorText);
+
+            return strOutput;
+        }
+
+        private bool UnlockSSH(Chilkat.Ssh ssh)
+        {
+            bool success = ssh.UnlockComponent("Unlockcode");
+            if (success != true)
+            {
+                Console.WriteLine(ssh.LastErrorText + "\nUnlock failed");
+                return success;
+            }
+            Console.WriteLine(ssh.LastErrorText + "\nUnlock succesful");
+            return success;
         }
     }
 }

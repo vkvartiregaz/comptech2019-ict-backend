@@ -1,51 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-// Контроллер Collection
-
-namespace TodoApi.Controllers
+namespace comptech2019_ict.Controllers
 {
     [Route("api/[controller]")]
-    public class CollectionController : Controller
+    [ApiController]
+    public class CollectionController : ControllerBase
     {
-        // GET: api/<controller>
+        public class Collection
+        {
+            public string Name { get; set; }
+            public string[] Objects { get; set; }
+        }
+
+        // GET: api/Collection список коллекций
         [HttpGet]
-        public string Get()
+        public IEnumerable<string> Get()
         {
-            return "Hello world from Get()";
+            return new string[] {"Some collection1" , "Some collection2" };
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET: api/Collection/name получить коллекцию по имени 
+        [HttpGet("{Name}")]
+        public string Get(string Name)
         {
-            return "Hello world from Get(id)";
+            return "Collection by name";
         }
 
-        // POST api/<controller>
+        // POST: api/Collection создать коллекцию json
         [HttpPost]
-        public string Post([FromBody]string value)
+        public void Post([FromBody] Collection value)
         {
-            return "Hello world from Post";
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public string Put(int id, [FromBody]string value)
+        // PUT: api/Collection/name переименовать коллекцию по имени
+        [HttpPut("{name}")]
+        public void Put(string Name, [FromBody] string value)
         {
-            return "Hello world from Put";
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public string Delete(int id)
+        // DELETE: api/Collection/name удалить коллекцию по имени
+        [HttpDelete("{name}")]
+        public void Delete(string name)
         {
-            return "Hello world from Delete";
+
         }
     }
 }

@@ -1,35 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace TodoApi.Controllers
+namespace comptech2019_ict.Controllers
 {
     [Route("api/[controller]")]
-    public class MetadataController : Controller
+    [ApiController]
+    public class MetaDataController : ControllerBase
     {
-        // GET: api/<controller>
+        public class Metadata
+        {
+            public string Info { get; set; }
+        }
+        // GET: api/MetaData получить список метаданных
         [HttpGet]
-        public string Get()
+        public string[] Get()
         {
-            return "Hello world from Get()";
+            return new string[] { "123", "456", "789" };
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET: api/MetaData/Name
+        [HttpGet("{Name}", Name = "Get")]
+        public Metadata Get(string Name)
         {
-            return "Hello world from Get(id)";
+            return new Metadata { Info = "123" };
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public string Put(int id, [FromBody]string value)
+        // PUT: api/MetaData/5
+        [HttpPut("{Name}")]
+        public void Put(string Name, [FromBody] string value)
         {
-            return "Hello world from Put";
         }
     }
 }
