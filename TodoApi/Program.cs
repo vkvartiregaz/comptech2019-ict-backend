@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-
 namespace TodoApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            Chilkat.Rest rest = new Chilkat.Rest();
+            Console.WriteLine(rest.Version);
             CreateWebHostBuilder(args).Build().Run();
         }
 
