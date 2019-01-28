@@ -1,0 +1,9 @@
+/TodoApi.sln
+/TodoApi/bin
+/TodoApi/obj
+/TodoApi/Properties
+/TodoApi/appsettings.Development.json
+/TodoApi/appsettings.json
+/TodoApi/wwwroot
+/TodoApi/TodoApi.csproj
+/.vs
