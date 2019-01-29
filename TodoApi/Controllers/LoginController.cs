@@ -4,7 +4,6 @@ using TodoApi;
 
 namespace comptech2019_ict.Controllers
 {
-    
     public class User
     {
         public string Name { get; set; }
@@ -15,7 +14,7 @@ namespace comptech2019_ict.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-
+        private SshClient sshClient;
         // GET: api/Login/Logout
         [HttpGet("[action]")]
         public string Logout()
@@ -28,9 +27,8 @@ namespace comptech2019_ict.Controllers
         [HttpPost("[action]")]
         public string Auth([FromBody] User user)
         {
-            SshClient sshClient = new SshClient("ssd1.sscc.ru", 2231, "utf-8", user.Name, user.Password);
+            sshClient = new SshClient("ssd1.sscc.ru", 2231, "utf-8", user.Name, user.Password);
             sshClient.Connect();
-            string res = sshClient.ThrowCommand("ls");
             sshClient.Disconnect();
             return res;
         }

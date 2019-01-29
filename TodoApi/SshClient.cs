@@ -8,18 +8,11 @@ namespace TodoApi
 {
     public class SshClient
     {
-        //readonly int Port;
-        //readonly string ServerName;
-        //public string Charset { get; set; }
-
         readonly ConnectionInfo ConnectionInfo;
         private readonly Renci.SshNet.SshClient Ssh;
         
         public SshClient(string ServerName, int Port, string Charset, string Name, string Password)
         {
-            //this.Port = Port;
-            //this.ServerName = ServerName;
-            //this.Charset = Charset;
             ConnectionInfo = new ConnectionInfo(ServerName, Port, Name,
                 new AuthenticationMethod[]{
                     new PasswordAuthenticationMethod(Name, Password)
@@ -32,7 +25,7 @@ namespace TodoApi
         {
             Ssh.Connect(); // эта штука кидается исключениями
         }
-
+        
         public string ThrowCommand(string Command)
         {
             return Ssh.CreateCommand(Command).Execute(); // эта штука тоже кидается исключениями
@@ -43,5 +36,5 @@ namespace TodoApi
             if(Ssh.IsConnected)
                 Ssh.Disconnect();
         }
-    }
+    }   
 }
