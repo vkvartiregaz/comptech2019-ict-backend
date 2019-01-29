@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using TodoApi;
 
 namespace comptech2019_ict.Controllers
 {
@@ -27,7 +28,11 @@ namespace comptech2019_ict.Controllers
         [HttpPost("[action]")]
         public string Auth([FromBody] User user)
         {
-            return "Hello";
+            SshClient sshClient = new SshClient("ssd1.sscc.ru", 2231, "utf-8", user.Name, user.Password);
+            sshClient.Connect();
+            string res = sshClient.ThrowCommand("ls");
+            sshClient.Disconnect();
+            return res;
         }
     }
 }

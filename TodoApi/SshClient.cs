@@ -15,7 +15,7 @@ namespace TodoApi
         readonly ConnectionInfo ConnectionInfo;
         private readonly Renci.SshNet.SshClient Ssh;
         
-        SshClient(string ServerName, int Port, string Charset, string Name, string Password)
+        public SshClient(string ServerName, int Port, string Charset, string Name, string Password)
         {
             //this.Port = Port;
             //this.ServerName = ServerName;
@@ -38,7 +38,7 @@ namespace TodoApi
             return Ssh.CreateCommand(Command).Execute(); // эта штука тоже кидается исключениями
         }
 
-        private void Disconnect()
+        public void Disconnect()
         {
             if(Ssh.IsConnected)
                 Ssh.Disconnect();
