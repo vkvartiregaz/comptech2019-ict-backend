@@ -53,23 +53,36 @@ namespace TodoApi
 
         public void Connect()
         {
-            ssh.Connect(); // эта штука кидается исключениями
+            if (ssh.IsConnected == false)
+            {
+                ssh.Connect(); // эта штука кидается исключениями
+            }
         }
         
         public SshCommand GetCommand(string Command)
         {
-            return ssh.CreateCommand(Command, encoding);
+            if (ssh.IsConnected == true)
+            {
+                return ssh.CreateCommand(Command, encoding);
+            }
+            throw new Exception("No connected SSH");
         }
 
         public string ThrowCommand(string Command)
         {
-            return ssh.CreateCommand(Command, encoding).Execute(); // эта штука тоже кидается исключениями
+            if (ssh.IsConnected == true)
+            {
+                return ssh.CreateCommand(Command, encoding).Execute(); // эта штука тоже кидается исключениями
+            }
+            return "No SSH connection";
         }
 
         public void Disconnect()
         {
-            if(ssh.IsConnected)
+            if (ssh.IsConnected)
+            {
                 ssh.Disconnect();
+            }
         }
     }   
 }

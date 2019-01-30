@@ -27,10 +27,8 @@ namespace comptech2019_ict.Controllers
         [HttpPost("[action]")]
         public string Auth([FromBody] User user)
         {
-            sshClient = new SshClient("ssd1.sscc.ru", 2231, "utf-8", user.Name, user.Password);
-            sshClient.Connect();
-            sshClient.Disconnect();
-            return res;
+            sshClient = new SshClient("ssd1.sscc.ru", 2231, user.Name, user.Password);
+
         }
     }
 }
