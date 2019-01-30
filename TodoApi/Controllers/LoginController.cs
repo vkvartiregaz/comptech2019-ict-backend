@@ -14,12 +14,11 @@ namespace comptech2019_ict.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private SshClient sshClient;
         // GET: api/Login/Logout
         [HttpGet("[action]")]
         public string Logout()
         {
-            return "logout";
+            return SshClient.Disconnect();
         }
 
         // POST: api/Login/Auth json body
@@ -27,8 +26,16 @@ namespace comptech2019_ict.Controllers
         [HttpPost("[action]")]
         public string Auth([FromBody] User user)
         {
-            sshClient = new SshClient("ssd1.sscc.ru", 2231, user.Name, user.Password);
-
+            SshClient.SetConnectionInfo("ssd1.sscc.ru", 2231, user.Name, user.Password);
+            try
+            {
+                SshClient.Connect();
+            }
+            catch(Exception e)
+            {
+                return "Some errors in connection" + e.Message;
+            }
+            return "Connected to " + SshClient.ConnectionInfo.Host;
         }
     }
 }

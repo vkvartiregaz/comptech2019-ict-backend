@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TodoApi;
 
 namespace comptech2019_ict.Controllers
 {
@@ -22,9 +23,9 @@ namespace comptech2019_ict.Controllers
 
         // GET: api/object список объектов
         [HttpGet]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "Some object1", "Some object2" };
+            return SshClient.ThrowCommand("ls");
         }
 
         // GET: api/object/name получить объект по имени 
