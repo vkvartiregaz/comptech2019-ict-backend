@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace TodoApi
@@ -9,40 +10,66 @@ namespace TodoApi
     public class SshClient
     {
         readonly ConnectionInfo ConnectionInfo;
-        private readonly Renci.SshNet.SshClient Ssh;
+        private readonly Renci.SshNet.SshClient ssh;
+
+        public Encoding encoding = Encoding.UTF8;
         
-        public SshClient(string ServerName, int Port, string Charset, string Name, string Password)
+
+        public SshClient( string serverName, int port, Encoding encoding, string name, string password)
         {
-            ConnectionInfo = new ConnectionInfo(ServerName, Port, Name,
+            this.encoding = encoding;
+            ConnectionInfo = new ConnectionInfo(serverName, port, name,
                 new AuthenticationMethod[]{
-                    new PasswordAuthenticationMethod(Name, Password)
+                    new PasswordAuthenticationMethod(name, password)
                 });
-            Ssh = new Renci.SshNet.SshClient(ConnectionInfo);
+            ssh = new Renci.SshNet.SshClient(ConnectionInfo);
+        }
+        public SshClient(string serverName, int port, string name, string password)
+        {
+            ConnectionInfo = new ConnectionInfo(serverName, port, name,
+                new AuthenticationMethod[]{
+                    new PasswordAuthenticationMethod(name, password)
+                });
+            ssh = new Renci.SshNet.SshClient(ConnectionInfo);
         }
 
-        public SshClient(string ServerName, int Port, string Charset, string Name, PrivateKeyFile KeyFiles)
+        public SshClient(string serverName, int port, Encoding encoding, string name, PrivateKeyFile KeyFiles)
         {
-            ConnectionInfo = new ConnectionInfo(ServerName, Port, Name,
+            this.encoding = encoding;
+            ConnectionInfo = new ConnectionInfo(serverName, port, name,
                 new AuthenticationMethod[]{
-                    new PrivateKeyAuthenticationMethod(Name, KeyFiles)
+                    new PrivateKeyAuthenticationMethod(name, KeyFiles)
                     });
-            Ssh = new Renci.SshNet.SshClient(ConnectionInfo);
+            ssh = new Renci.SshNet.SshClient(ConnectionInfo);
+        }
+        public SshClient(string serverName, int port, string name, PrivateKeyFile KeyFiles)
+        {
+            ConnectionInfo = new ConnectionInfo(serverName, port, name,
+                new AuthenticationMethod[]{
+                    new PrivateKeyAuthenticationMethod(name, KeyFiles)
+                    });
+            ssh = new Renci.SshNet.SshClient(ConnectionInfo);
         }
 
         public void Connect()
         {
-            Ssh.Connect(); // эта штука кидается исключениями
+            ssh.Connect(); // эта штука кидается исключениями
         }
         
+        public SshCommand GetCommand(string Command)
+        {
+            return ssh.CreateCommand(Command, encoding);
+        }
+
         public string ThrowCommand(string Command)
         {
-            return Ssh.CreateCommand(Command).Execute(); // эта штука тоже кидается исключениями
+            return ssh.CreateCommand(Command, encoding).Execute(); // эта штука тоже кидается исключениями
         }
 
         public void Disconnect()
         {
-            if(Ssh.IsConnected)
-                Ssh.Disconnect();
+            if(ssh.IsConnected)
+                ssh.Disconnect();
         }
     }   
 }
