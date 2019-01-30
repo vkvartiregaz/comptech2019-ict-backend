@@ -16,8 +16,16 @@ namespace TodoApi
             ConnectionInfo = new ConnectionInfo(ServerName, Port, Name,
                 new AuthenticationMethod[]{
                     new PasswordAuthenticationMethod(Name, Password)
-                    /*,new PrivateKeyAuthenticationMethod(rsaKey)*/
                 });
+            Ssh = new Renci.SshNet.SshClient(ConnectionInfo);
+        }
+
+        public SshClient(string ServerName, int Port, string Charset, string Name, PrivateKeyFile KeyFiles)
+        {
+            ConnectionInfo = new ConnectionInfo(ServerName, Port, Name,
+                new AuthenticationMethod[]{
+                    new PrivateKeyAuthenticationMethod(Name, KeyFiles)
+                    });
             Ssh = new Renci.SshNet.SshClient(ConnectionInfo);
         }
 
